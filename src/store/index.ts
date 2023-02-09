@@ -1,6 +1,5 @@
 import {configureStore} from "@reduxjs/toolkit"
-import testSlice from "./module/test"
-
+import recommendRedcer from "./module/recommend";
 
 
 
@@ -13,7 +12,7 @@ import testSlice from "./module/test"
 
 const store = configureStore({
     reducer:{
-        test:testSlice
+        recommend:recommendRedcer
     }
 })
 
