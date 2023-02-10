@@ -1,19 +1,21 @@
 import Scroll from "@/baseUI/Scroll/Scroll";
 import Slider from "@/components/Slider/Slider";
 import { fetchBannerListDateAction } from "@/store/module/recommend";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import style from "@/assets/global-style"
 import { Singer } from "@/api/type";
 import { List, ListItem, Title } from "./style";
 import { getCount } from "@/api/utils";
+import { Outlet, useNavigate } from "react-router-dom";
+import ImgR from "@/components/ImgR";
 
 
 export default function () {
 
     const dispatch = useDispatch();
-
+    const [scrollRefresh,setScrollRefresh] = useState(false)
     const { bannerList, singerList } = useSelector(({ recommend }: any) => {
         return {
             bannerList: recommend.bannerList,
@@ -33,35 +35,47 @@ export default function () {
     // });
 
     useEffect(() => {
+        if(bannerList.length)return;
         dispatch(fetchBannerListDateAction() as any);
     }, [])
+    const navigate = useNavigate();
+    const navHandle = (id: number | string) => {
+        console.log("navHandle")
+        navigate(id + "")
+    }
     const GoodList = ({ singerList }: { singerList: Singer[] }) => {
+
         return (<List>
             {
                 singerList.map(singer => {
-                    return (<ListItem key={singer.id}>
-                        <div className="imgWrapper" >
-                            <img src={singer.picUrl + "?Param=300x300"} />
-                            <div className="playCount">
-                                <span className="iconfont icon-music"></span>
-                                <span>{getCount(singer.playCount)}</span>
-                            </div>
-                            <div className="decorate"></div>
-                        </div>
-                        <div className="desc">{singer.name}</div>
-                    </ListItem>)
+                    // return (<ListItem key={singer.id}  onClick={() => navHandle(singer.id)}>
+                    //     <div className="imgWrapper" >
+                    //         <img src={singer.picUrl + "?Param=300x300"} />
+                    //         <div className="playCount">
+                    //             <span className="iconfont icon-music"></span>
+                    //             <span>{getCount(singer.playCount)}</span>
+                    //         </div>
+                    //         <div className="decorate"></div>
+                    //     </div>
+                    //     <div className="desc">{singer.name}</div>
+                    // </ListItem>)
+                    return <ImgR singer={singer} width="32%" key={singer.id}/>
                 })
             }
         </List>)
     }
+
     // <Slider bannerList={bannerList}></Slider>
     return (
-        <Scroll>
-            <div>
-                <Slider bannerList={bannerList}></Slider>
-                <Title>推荐歌单</Title>
-                <GoodList singerList={singerList} />
-            </div>
-        </Scroll>
+        <>
+            <Scroll>
+                <div>
+                    <Slider bannerList={bannerList}></Slider>
+                    <Title>推荐歌单</Title>
+                    <GoodList singerList={singerList} />
+                </div>
+            </Scroll>
+            <Outlet />
+        </>
     )
 }

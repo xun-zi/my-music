@@ -20,12 +20,13 @@ const Test = styled.div`
 `
 
 type Props = {
-    children: ReactNode
+    children: ReactNode,
 }
 
-export default function (porps: Props) {
+export default function (props: Props) {
     const wrapperRef = useRef<HTMLDivElement | null>(null);
     const [bs, setBs] = useState<BScroll | null>(null)
+
     useLayoutEffect(() => {
         const bs = new BScroll('.scroll-wrapper', {
             freeScroll: true,
@@ -38,19 +39,22 @@ export default function (porps: Props) {
                 start: 1,
                 min: 0.5,
                 max: 2
-            }
+            },
+            click: true,
+            stopPropagation: true
         })
         setBs(bs);
     }, [])
 
     useEffect(() => {
-        if(!bs)return;
+        if (!bs) return;
         bs.refresh();
     })
-    // useEffect(()=> {
-    //     if(!bs)return;
-    //     bs.refresh();
-    // })
+    useEffect(() => {
+        if (!bs) return;
+        bs.refresh();
+    })
+
     // useEffect(() => {
     //     const bs = new BScroll('.scroll-wrapper', {
     //         freeScroll: true,
@@ -70,7 +74,7 @@ export default function (porps: Props) {
 
     return (<Scroll ref={wrapperRef} className="scroll-wrapper">
         {
-            porps.children
+            props.children
         }
     </Scroll>)
 }

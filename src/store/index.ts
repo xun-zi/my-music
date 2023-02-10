@@ -1,6 +1,6 @@
 import {configureStore} from "@reduxjs/toolkit"
 import recommendRedcer from "./module/recommend";
-
+import albumReducer from "./module/album";
 
 
 
@@ -12,7 +12,8 @@ import recommendRedcer from "./module/recommend";
 
 const store = configureStore({
     reducer:{
-        recommend:recommendRedcer
+        recommend:recommendRedcer,
+        album:albumReducer
     }
 })
 
