@@ -13,9 +13,8 @@ function App() {
     <div className="App">
       {useRoutes(routes)}
       <div>
-        {
-          fullScreen ? <NormalPlayer /> : <MiniPlayer />
-        }
+           <NormalPlayer /> 
+           <MiniPlayer />
       </div>
     </div>
   )

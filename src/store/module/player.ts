@@ -4,7 +4,7 @@ const playerSlice = createSlice({
   name: "player",
   initialState: {
     playing: true,
-    fullScreen: true,
+    fullScreen: false,
   },
   reducers: {
     changePlayer(state, { payload }: { payload: boolean }) {

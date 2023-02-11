@@ -44,21 +44,29 @@ export const Cd = styled.div<{
   bottom: 17%;
   width: 100%;
   display: flex;
+  /* display:inline-block; */
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  animation: ${rotate} 10s infinite linear;
-  &.pause {
-    animation-play-state: paused;
+
+  .cd-wrap {
+    display: inline-block;
+    z-index: 1;
+    transform: translate3d(0, 0, 0) scale(1);
   }
   .bg {
     position: relative;
     background-image: url(${(props) => props.url});
     background-size: 100% 100%;
-    width: 70%;
+    width: 70vw;
     height: 70vw;
     border-radius: 50%;
-    z-index: 1;
+
+    animation: ${rotate} 10s infinite linear;
+    &.pause {
+      animation-play-state: paused;
+    }
+
     img {
       position: absolute;
       left: 0;
@@ -74,8 +82,11 @@ export const Cd = styled.div<{
 `;
 
 export const Top = styled.div`
-  display: flex;
-  align-items: center;
+  display:inline-block;
+  .top {
+    display: flex;
+    align-items: center;
+  }
   .iconfont {
     margin-left: 5px;
     display: block;
@@ -109,6 +120,7 @@ export const Top = styled.div`
 export const Wrapper = styled.div<{
   url?: string;
 }>`
+  display: none;
   position: fixed;
   top: 0;
   bottom: 0;
@@ -116,6 +128,39 @@ export const Wrapper = styled.div<{
   right: 0;
   background-color: white;
   /* z-index: 1000; */
+
+  &.normal-enter .cd-wrap {
+    display: inline-block;
+    z-index: 1;
+    transform: translate3d(calc(-50vw + 40px), calc(50vh - 30px), 0) scale(0.15);
+    transition: 0.2s;
+  }
+  &.normal-enter-active .cd-wrap {
+    display: inline-block;
+    z-index: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+
+  &.normal-enter .top {
+    transform: translate3d(0, -100%, 0);
+    transition-delay:0.2s;
+    transition: 0.4s;
+  }
+
+  &.normal-enter-active .top {
+    transform: translate3d(0, 0, 0);
+  }
+
+  &.normal-enter .bottom {
+    transform: translate3d(0, 100%, 0);
+    transition-delay:0.2s;
+    transition: 0.4s;
+  }
+
+  &.normal-enter-active .bottom {
+    transform: translate3d(0, 0, 0);
+  }
+
   .background {
     position: absolute;
     left: 0;
@@ -123,7 +168,7 @@ export const Wrapper = styled.div<{
     width: 100%;
     height: 100%;
     opacity: 0.6;
-    z-index:-1;
+    z-index: -1;
     img {
       width: 100vw;
       height: 100vh;
