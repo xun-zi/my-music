@@ -4,9 +4,7 @@ import PageTransition from "@/components/pageTransition"
 import { useEffect, useRef, useState, useTransition } from "react"
 import style from "@/assets/global-style"
 import { Bg, Desc, List, ListItem, Operation } from "./style";
-import { currentAlbum } from "@/mock/album"
 import { getCount, getName } from "@/api/utils";
-import Scroll from "@/baseUI/Scroll/Scroll";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchAlbumDataAction } from "@/store/module/album";
 import { useParams } from "react-router-dom";
@@ -23,11 +21,11 @@ export default function () {
         dispatch(fetchAlbumDataAction(Params.id) as any)
     }, [])
 
-    const {currentAlbum,loading} = useSelector((state:any) => {
-        console.log("state.album)",state.album)
+    const { currentAlbum, loading } = useSelector((state: any) => {
+        console.log("state.album)", state.album)
         return {
-            currentAlbum:state.album.currentAlbum as CurrentAlbum,
-            loading:state.album.loading as boolean
+            currentAlbum: state.album.currentAlbum as CurrentAlbum,
+            loading: state.album.loading as boolean
         }
     })
 
@@ -55,7 +53,7 @@ export default function () {
     const GoodList = () => {
         return <List>
             <div className="Top">
-                <span className="iconfont icon-add"></span>
+                <span className="iconfont icon-Player"></span>
                 <span className="prefix">播放全部</span>
                 <span className="count">(共{getCount(currentAlbum.tracks.length)}首)</span>
                 <div className="collect">
@@ -130,7 +128,7 @@ export default function () {
 
     return (<PageTransition showStatus={showStatus} ref={scrollRef}>
         {
-            loading ? "loading" : <ShowEL/>
+            loading ? "loading" : <ShowEL />
         }
     </PageTransition>)
 }

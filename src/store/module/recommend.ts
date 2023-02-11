@@ -7,7 +7,6 @@ export const fetchBannerListDateAction = createAsyncThunk("fetchBannerListDateAc
         dispatch(changeBannerList(data.banners));
     })
     getRecommendListRequest().then((data) => {
-        
         dispatch(changeSingerList(data.result))
     })
 })

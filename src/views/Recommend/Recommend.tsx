@@ -1,7 +1,7 @@
 import Scroll from "@/baseUI/Scroll/Scroll";
 import Slider from "@/components/Slider/Slider";
 import { fetchBannerListDateAction } from "@/store/module/recommend";
-import { useEffect, useState } from "react";
+import { memo, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import style from "@/assets/global-style"
@@ -10,12 +10,15 @@ import { List, ListItem, Title } from "./style";
 import { getCount } from "@/api/utils";
 import { Outlet, useNavigate } from "react-router-dom";
 import ImgR from "@/components/ImgR";
+import Singers from "../singers/Singers";
 
 
-export default function () {
+
+
+function Recommend() {
 
     const dispatch = useDispatch();
-    const [scrollRefresh,setScrollRefresh] = useState(false)
+    const [scrollRefresh, setScrollRefresh] = useState(false)
     const { bannerList, singerList } = useSelector(({ recommend }: any) => {
         return {
             bannerList: recommend.bannerList,
@@ -35,16 +38,11 @@ export default function () {
     // });
 
     useEffect(() => {
-        if(bannerList.length)return;
+        if (bannerList.length) return;
         dispatch(fetchBannerListDateAction() as any);
     }, [])
-    const navigate = useNavigate();
-    const navHandle = (id: number | string) => {
-        console.log("navHandle")
-        navigate(id + "")
-    }
-    const GoodList = ({ singerList }: { singerList: Singer[] }) => {
 
+    function GoodList(singerList: Singer[]) {
         return (<List>
             {
                 singerList.map(singer => {
@@ -59,12 +57,11 @@ export default function () {
                     //     </div>
                     //     <div className="desc">{singer.name}</div>
                     // </ListItem>)
-                    return <ImgR singer={singer} width="32%" key={singer.id}/>
+                    return <ImgR singer={singer} width="32%" key={singer.id} />
                 })
             }
         </List>)
     }
-
     // <Slider bannerList={bannerList}></Slider>
     return (
         <>
@@ -72,10 +69,15 @@ export default function () {
                 <div>
                     <Slider bannerList={bannerList}></Slider>
                     <Title>推荐歌单</Title>
-                    <GoodList singerList={singerList} />
+                    {
+                        GoodList(singerList)
+                    }
                 </div>
             </Scroll>
             <Outlet />
         </>
     )
 }
+
+
+export default memo(Recommend)

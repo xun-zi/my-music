@@ -72,7 +72,7 @@ export const List = styled.div`
     display: flex;
     align-items: center;
     border-bottom: 1px solid #e4e4e4;
-    .icon-add {
+    .icon-add,.icon-Player {
       font-size: 24px;
       margin-right: 5px;
     }
@@ -107,6 +107,7 @@ export const ListItem = styled.div`
   display: flex;
   box-sizing:border-box;
   padding-right:10px;
+  line-height:1.5;
   .idx {
     height: 60px;
     width: 60px;
@@ -125,14 +126,13 @@ export const ListItem = styled.div`
       font-size: 17px;
       font-size: 550;
       text-overflow: ellipsis;
-      overflow: hidden;
       ${
         style.aLineText
       }
     }
     .ly {
-      font-size: 13px;
-      color: #555;
+      font-size: 11px;
+      color: #999;
       ${
         style.aLineText
       }

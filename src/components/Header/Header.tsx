@@ -24,7 +24,6 @@ const Wrapper = styled.div`
     }
     .Marquee{
         h1{
-            margin-left:100%;
             white-space:nowrap;
         }
     }
