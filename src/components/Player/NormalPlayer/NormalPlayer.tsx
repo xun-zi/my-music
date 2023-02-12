@@ -4,7 +4,7 @@ import { getName, getSongUrl, isEmptyObject } from "@/api/utils"
 import disc from "./disc.png"
 import ProgressBar from "@/components/ProgressBar/ProgressBar"
 import { useDispatch, useSelector } from "react-redux"
-import { changeCurrentTime, changePlayer, changePlayerState, changeScreen, changeSongIndex, nextSong, preSong, randomPlayer } from "@/store/module/player"
+import { changeCurrentTime, changePlayer, changePlayerState, changeScreen, changeShowPlayList, changeSongIndex, nextSong, preSong, randomPlayer } from "@/store/module/player"
 import { CSSTransition } from "react-transition-group"
 import { useEffect, useRef, useState } from "react"
 import { CurrentSong } from "../type"
@@ -80,6 +80,11 @@ export default function (props: Props) {
         }
     }
 
+    const musicListOnclick = (e:React.SyntheticEvent<HTMLSpanElement, Event>) => {
+        e.stopPropagation();
+        dispatch(changeShowPlayList(true));
+    }
+
     function showEl() {
         return (<CSSTransition
             in={fullScreen}
@@ -139,7 +144,7 @@ export default function (props: Props) {
                                 <span className="iconfont icon-play-prev-1" style={{ transform: "rotate(180deg)", display: "inline-block" }} onClick={() => dispatch(nextSong())}></span>
                             </div>
                             <div className="right">
-                                <span className="iconfont icon-musiclist"></span>
+                                <span className="iconfont icon-musiclist" onClick={musicListOnclick}></span>
                             </div>
                         </div>
                     </div>

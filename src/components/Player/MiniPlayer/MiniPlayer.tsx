@@ -2,7 +2,7 @@ import styled, { keyframes } from "styled-components"
 import { currentSong } from "@/mock/player"
 import { getName, getSongUrl, isEmptyObject } from "@/api/utils"
 import { useDispatch, useSelector } from "react-redux"
-import { changePlayer, changeScreen } from "@/store/module/player"
+import { changePlayer, changeScreen, changeShowPlayList } from "@/store/module/player"
 import { useEffect, useRef, useState } from "react"
 import { CSSTransition } from "react-transition-group";
 import { Wrapper } from "./style"
@@ -28,6 +28,11 @@ export default function (props: Props) {
     }
 
     const miniPlayerRef = useRef<HTMLDivElement | null>(null);
+
+    const musicListClick = (e:React.SyntheticEvent<HTMLSpanElement, Event>) => {
+        e.stopPropagation();
+        dispatch(changeShowPlayList(true))
+    }
 
     function showEl() {
         return (<CSSTransition
@@ -68,7 +73,7 @@ export default function (props: Props) {
                             <span className="iconfont icon-player-play" onClick={(e) => startPause(true, e)}></span>
                     }
                 </div>
-                <span className="iconfont icon-musiclist"></span>
+                <span className="iconfont icon-musiclist" onClick={musicListClick}></span>
             </Wrapper>
         </CSSTransition>)
     }

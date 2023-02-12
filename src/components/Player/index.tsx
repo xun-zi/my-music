@@ -5,6 +5,7 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { switchToPlayList } from "@/store/module/player";
 import { getAlbumDetailRequest, getRecommendListRequest } from "@/api/request";
+import PlayList from "./PlayList/PlayList";
 
 
 export default function () {
@@ -19,5 +20,6 @@ export default function () {
     return (<>
         <NormalPlayer currentSong={currentSong}/>
         <MiniPlayer currentSong={currentSong}/>
+        <PlayList/>
     </>)
 }
