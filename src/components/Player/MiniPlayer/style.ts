@@ -42,7 +42,7 @@ img{
 }
 .bg{
     stroke-width: 4px; /* 设置边框宽度 */
-    stroke: red; /* 设置边框颜色 */
+    stroke: #461212; /* 设置边框颜色 */
 }
 .inner {
     stroke-width: 4px; /* 设置边框宽度 */
