@@ -89,7 +89,7 @@ export default function (props: Props) {
         return (<CSSTransition
             in={fullScreen}
             classNames="normal"
-            timeout={1000}
+            timeout={10000}
             onEnter={() => {
                 normalRef.current!.style.display = 'block';
             }}

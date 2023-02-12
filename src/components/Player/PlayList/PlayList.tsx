@@ -36,12 +36,12 @@ export default function () {
     return (<CSSTransition
         in={showPlayList}
         className="playList"
-        timeout={300}
+        timeout={400}
         onEnter={() => setShow(true)}
         onExited={() => setShow(false)}
     >
         <Wrapper onClick={WrapperClick} style={{ display: show ? "block" : "none" }}>
-            <GoodList onClick={(e) => e.stopPropagation()}>
+            <GoodList onClick={(e) => e.stopPropagation()} className="songList">
                 <div className="playState">
                     <span className={`iconfont ${playerStateName[playerState].svg}`}></span>
                     {
