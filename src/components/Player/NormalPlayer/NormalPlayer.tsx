@@ -4,7 +4,7 @@ import { getName, getSongUrl, isEmptyObject } from "@/api/utils"
 import disc from "./disc.png"
 import ProgressBar from "@/components/ProgressBar/ProgressBar"
 import { useDispatch, useSelector } from "react-redux"
-import { changeCurrentTime, changePlayer, changeScreen, nextSong, preSong } from "@/store/module/player"
+import { changeCurrentTime, changePlayer, changePlayerState, changeScreen, changeSongIndex, nextSong, preSong, randomPlayer } from "@/store/module/player"
 import { CSSTransition } from "react-transition-group"
 import { useEffect, useRef, useState } from "react"
 import { CurrentSong } from "../type"
@@ -22,7 +22,7 @@ export default function (props: Props) {
         dispatch(changeScreen(false));
     }
 
-    const { playing, fullScreen, currentTime } = useSelector(({ player }: any) => player)
+    const { playing, fullScreen, currentTime, playerState, playList,songIndex} = useSelector(({ player }: any) => player)
 
     const startPause = (state: boolean, e: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
         e.stopPropagation();
@@ -39,7 +39,7 @@ export default function (props: Props) {
         //     audioRef.current?.play();
         // },1000)
         const audio = audioRef.current!;
-        audio.play();
+        playing ? audio.play() : audio.pause();
     }, [currentSong])
     useEffect(() => {
         if (isEmptyObject(currentSong)) return;
@@ -61,6 +61,24 @@ export default function (props: Props) {
     }
 
 
+    function getPlayerClassNamebyId(state: number) {
+        const playState = ['icon-loop', 'icon-random', 'icon-singlecycle'];
+        return playState[state]
+    }
+
+    function playEndHandle() {
+        if (playerState == 0) {
+            dispatch(nextSong());
+        } else if (playerState == 1) {
+            let randomNum = 0;
+            do{
+               randomNum = Math.random() * playList.length | 0
+            } while(songIndex == randomNum);
+            dispatch(randomPlayer(randomNum));
+        } else {
+            audioRef.current!.currentTime = 0;
+        }
+    }
 
     function showEl() {
         return (<CSSTransition
@@ -103,10 +121,10 @@ export default function (props: Props) {
                         <ProgressBar duration={currentSong.dt} currentTime={currentTime} onProgressChange={onProgressChange} />
                         <div className="operation">
                             <div className="left">
-                                <span className="iconfont icon-heart"></span>
+                                <span className={`iconfont ${getPlayerClassNamebyId(playerState)}`} onClick={() => dispatch(changePlayerState((playerState + 1) % 3))}></span>
                             </div>
                             <div className="left">
-                                <span className="iconfont icon-play-prev-1" onClick={()=> dispatch(preSong())}></span>
+                                <span className="iconfont icon-play-prev-1" onClick={() => dispatch(preSong())}></span>
                             </div>
                             <div className="center">
                                 {
@@ -126,7 +144,7 @@ export default function (props: Props) {
                         </div>
                     </div>
                 </Bottom>
-                <audio ref={audioRef} style={{ display: "none" }} onTimeUpdate={(e) => updataTime(e)}></audio>
+                <audio ref={audioRef} style={{ display: "none" }} onTimeUpdate={(e) => updataTime(e)} onEnded={playEndHandle}></audio>
             </Wrapper>
         </CSSTransition>)
     }

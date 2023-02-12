@@ -11,7 +11,8 @@ const playerSlice = createSlice({
     songIndex:0,
     currentTime:0,
     playList:[] as CurrentSong[],
-    currentSong:{}
+    currentSong:{},
+    playerState:0
   },
   reducers: {
     changePlayer(state, { payload }: { payload: boolean }) {
@@ -42,10 +43,17 @@ const playerSlice = createSlice({
     preSong(state){
       state.songIndex = (state.songIndex - 1 + state.playList.length)%state.playList.length;
       state.currentSong = state.playList[state.songIndex];
+    },
+    changePlayerState(state,{payload}:{payload:number}){
+      state.playerState = payload;
+    },
+    randomPlayer(state,{payload}:{payload:number}){
+      state.songIndex = payload;
+      state.currentSong = state.playList[state.songIndex];
     }
   },
 });
 
-export const { changePlayer,changeScreen,changeCurrentTime,switchToPlayList,nextSong,preSong} = playerSlice.actions;
+export const { changePlayer,changeScreen,changeCurrentTime,switchToPlayList,nextSong,preSong,changePlayerState,changeSongIndex,randomPlayer} = playerSlice.actions;
 
 export default playerSlice.reducer;
