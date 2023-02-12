@@ -1,19 +1,28 @@
+import { formatPlayTime } from "@/api/utils";
 import { useEffect, useRef, useState } from "react";
 import { Wrapper } from "./style";
 
+type Props = {
+    duration:number,
+    currentTime:number,
+    onProgressChange:(time:number) => any
+}
 
-export default function () {
-    
+export default function (props:Props) {
+    const {duration,currentTime,onProgressChange} = props
     const progressBtnRef = useRef<HTMLDivElement | null>(null);
     const progressBarRef = useRef<HTMLDivElement | null>(null);
     const progressWrapperRef = useRef<HTMLDivElement | null>(null);
-
+    // console.log("duration",duration);
+    // console.log("currentTime",currentTime)
     const TouchData = useRef({
         initiated: false,
         startPos: 0,
         progressW: 0,
     });
-
+    useEffect(() => {
+        ProgressChange(progressWrapperRef.current!.clientWidth * currentTime / duration * 1000);
+    },[currentTime])
     const ProgressChange = (num: number) => {
         const progressBar = progressBarRef.current!;
         const progressBtn = progressBtnRef.current!;
@@ -22,12 +31,13 @@ export default function () {
     }
 
     return (<Wrapper>
-        <span className="curTime">0:00</span>
+        <span className="curTime">{formatPlayTime(currentTime)}</span>
         <div className="progressWrapper" ref={progressWrapperRef} onClick={
             (e) => {
                 const rect = progressWrapperRef.current!.getBoundingClientRect();
                 const offsetWidth = e.pageX - rect.left;
-                ProgressChange(offsetWidth)
+                ProgressChange(offsetWidth);
+                onProgressChange(offsetWidth/progressWrapperRef.current!.clientWidth)
             }
         }>
             <div className="progressBar" ref={progressBarRef} ></div>
@@ -47,12 +57,13 @@ export default function () {
                     let overAllW = progressWrapperRef.current!.clientWidth;
                     if (newBarW > overAllW || newBarW < 0) return;
                     ProgressChange(newBarW)
+                    onProgressChange(newBarW/overAllW)
                 }}
                 onTouchEnd={(e) => {
                     TouchData.current.initiated = false;
                 }}
             />
         </div>
-        <span className="duration">4:17</span>
+        <span className="duration">{formatPlayTime(duration/1000)}</span>
     </Wrapper>)
 }

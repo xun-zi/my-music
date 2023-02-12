@@ -1,20 +1,21 @@
 import styled from "styled-components"
 import { Bottom, Cd, Top, Wrapper } from "./style"
 import { currentSong } from "@/mock/player"
-import { getName } from "@/api/utils"
+import { getName, getSongUrl, isEmptyObject } from "@/api/utils"
 import disc from "./disc.png"
 import ProgressBar from "@/components/ProgressBar/ProgressBar"
 import { useDispatch, useSelector } from "react-redux"
 import { changePlayer, changeScreen } from "@/store/module/player"
 import { CSSTransition } from "react-transition-group"
-import { useRef } from "react"
+import { useEffect, useRef, useState } from "react"
+import { playList } from "@/mock/player"
 
 
 
 
 
 export default function () {
-
+    const currentSong = playList[0];
     const dispatch = useDispatch<any>();
     const backHandle = () => {
         dispatch(changeScreen(false));
@@ -28,7 +29,34 @@ export default function () {
     };
 
     const normalRef = useRef<HTMLDivElement | null>(null);
-    return (<CSSTransition
+    const audioRef = useRef<HTMLAudioElement | null>(null);
+    useEffect(() => {
+        if (isEmptyObject(currentSong)) return;
+        audioRef.current!.src = getSongUrl(currentSong.id)
+        // console.log(audioRef.current)
+        // setTimeout(() => {
+        //     audioRef.current?.play();
+        // },1000)
+    }, [])
+    useEffect(() => {
+        const audio = audioRef.current!;
+        playing ? audio.play() : audio.pause();
+    },[playing])
+    const [currentTime,setCurrentTime] = useState(0);
+
+    const updataTime = (e:any) => {
+        // console.log(e.target.currentTime);
+        setCurrentTime(e.target.currentTime);
+    }
+
+
+    const onProgressChange = (time:number) => {
+        let newTime = time*currentSong.dt/1000;
+        setCurrentTime(newTime);
+        audioRef.current!.currentTime = newTime;
+    }
+
+    const ShowEL = (<CSSTransition
         in={fullScreen}
         classNames="normal"
         timeout={1000}
@@ -64,7 +92,7 @@ export default function () {
 
             <Bottom>
                 <div className="bottom">
-                    <ProgressBar />
+                    <ProgressBar duration={currentSong.dt}  currentTime={currentTime} onProgressChange={onProgressChange}/>
                     <div className="operation">
                         <div className="left">
                             <span className="iconfont icon-heart"></span>
@@ -90,6 +118,9 @@ export default function () {
                     </div>
                 </div>
             </Bottom>
+            <audio ref={audioRef} style={{ display: "none" }} onTimeUpdate={(e) => updataTime(e)}></audio>
         </Wrapper>
     </CSSTransition>)
+    
+    return isEmptyObject(currentSong) ? <></> : ShowEL;
 }

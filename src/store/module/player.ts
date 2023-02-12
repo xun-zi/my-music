@@ -1,10 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
-
 const playerSlice = createSlice({
   name: "player",
   initialState: {
-    playing: true,
+    playing: false,
     fullScreen: false,
+    songIndex:0,
   },
   reducers: {
     changePlayer(state, { payload }: { payload: boolean }) {
@@ -13,6 +13,9 @@ const playerSlice = createSlice({
     changeScreen(state, { payload }: { payload: boolean }) {
       state.fullScreen = payload;
     },
+    changeSongIndex(state,{payload}:{payload:number}){
+        state.songIndex = payload
+    }
   },
 });
 
