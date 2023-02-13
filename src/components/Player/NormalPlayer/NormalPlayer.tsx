@@ -4,7 +4,7 @@ import { getName, getSongUrl, isEmptyObject } from "@/api/utils"
 import disc from "./disc.png"
 import ProgressBar from "@/components/ProgressBar/ProgressBar"
 import { useDispatch, useSelector } from "react-redux"
-import { changeCurrentTime, changePlayer, changePlayerState, changeScreen, changeShowPlayList, changeSongIndex, nextSong, preSong, randomPlayer } from "@/store/module/player"
+import { changePlayer, changePlayerState, changeScreen, changeShowPlayList, changeSongIndex, nextSong, preSong, randomPlayer } from "@/store/module/player"
 import { CSSTransition } from "react-transition-group"
 import { useEffect, useRef, useState } from "react"
 import { CurrentSong } from "../type"
@@ -12,17 +12,20 @@ import { CurrentSong } from "../type"
 
 
 type Props = {
-    currentSong: CurrentSong
+    currentSong: CurrentSong,
+    currentTime:number,
+    setCurrentTime:(currentTime:number) => void
 }
 
 export default function (props: Props) {
-    const { currentSong } = props;
+    const { currentSong,setCurrentTime} = props;
     const dispatch = useDispatch<any>();
     const backHandle = () => {
         dispatch(changeScreen(false));
     }
-
-    const { playing, fullScreen, currentTime, playerState, playList,songIndex} = useSelector(({ player }: any) => player)
+    const {currentTime} = props;
+    const { playing, fullScreen, playerState, playList,songIndex} = useSelector(({ player }: any) => player)
+    
 
     const startPause = (state: boolean, e: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
         e.stopPropagation();
@@ -50,13 +53,13 @@ export default function (props: Props) {
 
     const updataTime = (e: any) => {
         // console.log(e.target.currentTime);
-        dispatch(changeCurrentTime(e.target.currentTime));
+        setCurrentTime(e.target.currentTime)
     }
 
 
     const onProgressChange = (time: number) => {
         let newTime = time * currentSong.dt / 1000;
-        dispatch(changeCurrentTime(newTime));
+        setCurrentTime(newTime)
         audioRef.current!.currentTime = newTime;
     }
 

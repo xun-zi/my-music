@@ -1,3 +1,5 @@
+import { CurrentSong } from "@/components/Player/type";
+
 export type banner = {
   imageUrl: string;
 };
@@ -17,13 +19,5 @@ export type CurrentAlbum = {
   coverImgUrl: string;
   subscribedCount: number;
   name: string;
-  tracks: {
-    name: string;
-    ar: {
-      name: string;
-    }[];
-    al: {
-      name: string;
-    };
-  }[];
+  tracks:CurrentSong[]
 };

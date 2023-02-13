@@ -1,7 +1,7 @@
 import Header from "@/components/Header/Header";
 import ImgR from "@/components/ImgR";
 import PageTransition from "@/components/pageTransition"
-import { useEffect, useRef, useState, useTransition } from "react"
+import { memo, useEffect, useRef, useState, useTransition } from "react"
 import style from "@/assets/global-style"
 import { Bg, Desc, List, ListItem, Operation } from "./style";
 import { getCount, getName } from "@/api/utils";
@@ -9,10 +9,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchAlbumDataAction } from "@/store/module/album";
 import { useParams } from "react-router-dom";
 import { CurrentAlbum } from "@/api/type";
+import { changePlayer, changePlayList, selectPlayerSong} from "@/store/module/player";
 
 
 
-export default function () {
+function Album() {
     const [showStatus, setShowStatus] = useState(true);
     const dispatch = useDispatch();
     const Params = useParams();
@@ -22,7 +23,7 @@ export default function () {
     }, [])
 
     const { currentAlbum, loading } = useSelector((state: any) => {
-        console.log("state.album)", state.album)
+        // console.log("state.album)", state.album)
         return {
             currentAlbum: state.album.currentAlbum as CurrentAlbum,
             loading: state.album.loading as boolean
@@ -51,6 +52,11 @@ export default function () {
         </Operation>)
     }
     const GoodList = () => {
+        const ListItemClick = (index:number) => {
+            dispatch(changePlayList(currentAlbum.tracks))
+            dispatch(selectPlayerSong(index))
+            dispatch(changePlayer(true));
+        }
         return <List>
             <div className="Top">
                 <span className="iconfont icon-Player"></span>
@@ -63,7 +69,7 @@ export default function () {
             </div>
             {
                 currentAlbum.tracks.map((item, index) => {
-                    return (<ListItem key={index}>
+                    return (<ListItem key={index} onClick={()=>{ListItemClick(index)}}>
                         <div className="idx">{index + 1}</div>
                         <div className="singer">
                             <div className="name">{item.name}</div>
@@ -121,14 +127,20 @@ export default function () {
                 </div>
             </div>
         </Desc>
-        <OperationEl />
-        <GoodList />
+        {
+            OperationEl()
+        }
+        {
+            GoodList()
+        }
     </>)
 
 
     return (<PageTransition showStatus={showStatus} ref={scrollRef}>
         {
-            loading ? "loading" : <ShowEL />
+            loading ? "loading" : ShowEL()
         }
     </PageTransition>)
 }
+
+export default memo(Album)

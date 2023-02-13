@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { GoodList, Wrapper } from "./style";
 import { CSSTransition } from "react-transition-group";
 import { changeShowPlayList, selectPlayerSong } from "@/store/module/player";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { getName } from "@/api/utils";
 import { CurrentSong } from "../type";
 
@@ -24,31 +24,105 @@ export default function () {
         disptch(selectPlayerSong(idx));
     }
     const playerStateName = [{
-        svg:"icon-loop",
+        svg: "icon-loop",
         name: "顺序"
     }, {
-        svg:"icon-random",
+        svg: "icon-random",
         name: "随机"
     }, {
-        svg:"icon-singlecycle",
+        svg: "icon-singlecycle",
         name: "单曲"
     }]
+
+
+    const WrapperRef = useRef<HTMLDivElement | null>(null);
+    useEffect(() => {
+        WrapperRef.current!.style.transform = "translate3d(0, 100%, 0)"
+    }, [])
+    const TouchData = useRef({
+        startPosY: 0,
+        drawing: false,
+        WrapperCurPosY: 0,
+        isScrollTop: true,
+    })
+
     return (<CSSTransition
         in={showPlayList}
         className="playList"
         timeout={400}
-        onEnter={() => setShow(true)}
-        onExited={() => setShow(false)}
+        onEnter={() => {
+            const Wrapper = WrapperRef.current!;
+            Wrapper.style.visibility = "visible";
+            Wrapper.style.transform = "translate3d(0, 0px, 0)"
+        }}
+        onExit={() => {
+            const Wrapper = WrapperRef.current!;
+            Wrapper.style.transform = "translate3d(0, 100%, 0)"
+            Wrapper.style.visibility = "hiddle";
+        }}
     >
-        <Wrapper onClick={WrapperClick} style={{ display: show ? "block" : "none" }}>
-            <GoodList onClick={(e) => e.stopPropagation()} className="songList">
+        <Wrapper onClick={WrapperClick} ref={WrapperRef}>
+            <GoodList onClick={(e) => e.stopPropagation()} className="songList"
+                onTouchStart={
+                    (e) => {
+                        let current = TouchData.current;
+                        current.drawing = true;
+                        // console.log(e.touches[0].pageY);
+                        current.startPosY = e.touches[0].pageY;
+                        const Wrapper = WrapperRef.current!;
+                        Wrapper.style.transition = ""
+                    }
+                }
+                onTouchMove={
+                    (e) => {
+                        let current = TouchData.current;
+                        const Wrapper = WrapperRef.current!;
+                        if(!current.isScrollTop){
+                            current.startPosY = e.touches[0].pageY;
+                            return;
+                        }
+                        
+                        let offset = e.touches[0].pageY - current.startPosY;
+
+                        // console.log("e.touches[0].pageY current.startPosY", e.touches[0].pageY,current.startPosY)
+                        // console.log(offset)
+                        Wrapper.style.transform = `translate3d(0, ${Math.max(0, offset)}px, 0)`;
+                        current.WrapperCurPosY = offset;
+                    }
+                }
+                onTouchEnd={
+                    (e) => {
+                        let current = TouchData.current;
+                        const Wrapper = WrapperRef.current!;
+                        if (current.WrapperCurPosY > 220) {
+                            disptch(changeShowPlayList(false))
+                            console.log("disptch(changeShowPlayList(false))")
+                        } else {
+                            Wrapper.style.transform = `translate3d(0,0, 0)`
+                        }
+                        current.drawing = false;
+                        Wrapper.style.transition = "0.4s"
+                    }
+                }
+            >
                 <div className="playState">
                     <span className={`iconfont ${playerStateName[playerState].svg}`}></span>
                     {
                         playerStateName[playerState].name + "播放"
                     }
                 </div>
-                <div className="list">
+                <div className="list"
+                    onScroll={(e) => {
+                        // console.log(e.currentTarget.scrollTop)
+                        let current = TouchData.current!;
+                        if(current.drawing){
+                            e.preventDefault();
+                        }
+                        if (e.currentTarget.scrollTop == 0) current.isScrollTop = true;
+                        else current.isScrollTop = false;
+
+                    }}
+                >
                     {
                         playList.map((item: CurrentSong, index: number) => {
                             return (

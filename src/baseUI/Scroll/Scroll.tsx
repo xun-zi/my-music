@@ -1,7 +1,7 @@
 import BScroll from '@better-scroll/core'
 import PullUp from '@better-scroll/pull-up'
 import { Zoom } from 'better-scroll'
-import { Children, ReactNode, useEffect, useLayoutEffect, useRef, useState } from 'react'
+import { Children, memo, ReactNode, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 import style from "@/assets/global-style"
 BScroll.use(Zoom)
@@ -23,7 +23,7 @@ type Props = {
     children: ReactNode,
 }
 
-export default function (props: Props) {
+function ScrollEl(props: Props) {
     const wrapperRef = useRef<HTMLDivElement | null>(null);
     const [bs, setBs] = useState<BScroll | null>(null)
 
@@ -45,15 +45,15 @@ export default function (props: Props) {
         })
         setBs(bs);
     }, [])
-
+    console.log("scrollEl")
     useEffect(() => {
         if (!bs) return;
         bs.refresh();
     })
-    useEffect(() => {
-        if (!bs) return;
-        bs.refresh();
-    })
+    // useEffect(() => {
+    //     if (!bs) return;
+    //     bs.refresh();
+    // })
 
     // useEffect(() => {
     //     const bs = new BScroll('.scroll-wrapper', {
@@ -78,3 +78,5 @@ export default function (props: Props) {
         }
     </Scroll>)
 }
+
+export default memo(ScrollEl)

@@ -7,7 +7,6 @@ const playerSlice = createSlice({
     playing: false,
     fullScreen: false,
     songIndex: 0,
-    currentTime: 0,
     playList: [] as CurrentSong[],
     currentSong: {},
     playerState: 0,
@@ -23,20 +22,14 @@ const playerSlice = createSlice({
     changeSongIndex(state, { payload }: { payload: number }) {
       state.songIndex = payload;
     },
-    changeCurrentTime(state, { payload }: { payload: number }) {
-      state.currentTime = payload;
-    },
     changeCurrentSong(state, { payload }: any) {
       state.currentSong = payload;
     },
     changeShowPlayList(state, { payload }: { payload: boolean }) {
       state.showPlayList = payload;
     },
-    switchToPlayList(state, { payload }: { payload: CurrentSong[] }) {
+    changePlayList(state,{ payload }: { payload: CurrentSong[] }){
       state.playList = payload;
-      state.songIndex = 0;
-      state.currentTime = 0;
-      state.currentSong = payload[0];
     },
     nextSong(state) {
       state.songIndex = (state.songIndex + 1) % state.playList.length;
@@ -64,15 +57,14 @@ const playerSlice = createSlice({
 export const {
   changePlayer,
   changeScreen,
-  changeCurrentTime,
-  switchToPlayList,
   nextSong,
   preSong,
   changePlayerState,
   changeSongIndex,
   randomPlayer,
   changeShowPlayList,
-  selectPlayerSong
+  selectPlayerSong,
+  changePlayList
 } = playerSlice.actions;
 
 export default playerSlice.reducer;

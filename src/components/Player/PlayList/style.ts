@@ -7,30 +7,37 @@ export const Wrapper = styled.div`
   top: 0;
   bottom: 0;
   z-index: 10004;
-  &.enter {
+  visibility: hidden;
+  transform:translate(0,100%,0);
+  /* .songList {
+    transition: 0.4s;
+    transform: translate(0, 400px, 0);
+  } */
+
+  /* &.enter {
     .songList {
-      transform: translate3d(0, 100%, 0);
-      transition: 0.4s;
+      transform: translate3d(0,100%, 0);
     }
-  }
-  &.enter-active {
+  } */
+
+  /* &.enter-active {
     .songList {
       transform: translate3d(0, 0%, 0);
-    }
-  }
-
-  &.exit {
-    .songList {
-      transform: translate3d(0, 0%, 0);
       transition: 0.4s;
     }
-  }
+  } */
 
-  &.exit-active {
+  /* &.exit {
     .songList {
       transform: translate3d(0, 100%, 0);
     }
-  }
+  } */
+
+  /* &.exit-active {
+    .songList {
+      transform: translate3d(0, 100%, 0);
+    }
+  } */
 `;
 
 export const GoodList = styled.div`

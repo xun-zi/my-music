@@ -11,12 +11,13 @@ import { CurrentSong } from "../type"
 
 
 type Props = {
-    currentSong: CurrentSong
+    currentSong: CurrentSong,
+    currentTime:number
 }
 
 export default function (props: Props) {
-    const { playing, fullScreen, currentTime } = useSelector((state: any) => state.player)
-    const { currentSong } = props;
+    const { playing, fullScreen } = useSelector((state: any) => state.player)
+    const { currentSong,currentTime} = props;
     const dispatch = useDispatch<any>();
 
     const startPause = (state: boolean, e: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
