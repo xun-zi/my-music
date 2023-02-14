@@ -1,7 +1,7 @@
 import axios from "axios";
 
-export const baseUrl = "https://netease-cloud-music-api-beta-teal-59.vercel.app/";
-
+// export const baseUrl = "https://netease-cloud-music-api-beta-teal-59.vercel.app/";
+export const baseUrl = "http://codercba.com:9002";
 const axiosInstance = axios.create({
   baseURL: baseUrl,
 });
