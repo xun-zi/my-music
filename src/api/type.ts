@@ -9,6 +9,7 @@ export type Singer = {
   picUrl?: string;
   name?: string;
   playCount: number;
+  accountId:number
 };
 
 export type CurrentAlbum = {

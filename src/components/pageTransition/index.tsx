@@ -13,7 +13,7 @@ const Container = styled.div`
   left: 0;
   width:100vw;
   height:100vh;
-  z-index: 1000;
+  z-index: 2000;
   background: #fff;
   transform-origin: right bottom;
   &.fly-enter, &.fly-appear {

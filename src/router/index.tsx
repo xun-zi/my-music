@@ -7,6 +7,7 @@ const Home = lazy(() => import("@/views/Home/Home"))
 const Recommend = lazy(() => import("@/views/Recommend/Recommend"));
 const Rank = lazy(() => import("@/views/rank/Rank"));
 const Singers = lazy(() => import("@/views/singers/Singers"))
+const Singer = lazy(() => import("@/views/singer/singer"));
 const routes: RouteObject[] = [
     {
         path: "/",
@@ -26,7 +27,11 @@ const routes: RouteObject[] = [
             element: <Rank />
         }, {
             path: "singers",
-            element: <Singers />
+            element: <Singers />,
+            children:[{
+                path:":id",
+                element:<Singer/>
+            }]
         }]
     }
 ]
