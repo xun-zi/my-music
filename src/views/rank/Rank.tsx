@@ -51,7 +51,7 @@ export default function () {
                         </div>
                         <div className="desc">
                             {
-                                item.tracks.map((data, index) => {
+                                item.tracks.map((data:any, index:any) => {
                                     return <span key={index}>
                                         {`${data.first} - ${data.second}`}
                                     </span>

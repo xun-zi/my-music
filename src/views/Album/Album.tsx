@@ -91,7 +91,8 @@ function Album() {
             </Bg>
             <ImgR width="120px" singer={{
                 picUrl: currentAlbum.coverImgUrl,
-                playCount: currentAlbum.subscribedCount
+                playCount: currentAlbum.subscribedCount,
+                accountId:1
             }} />
             <div className="desc">
                 <div className="title">{currentAlbum.name}</div>
