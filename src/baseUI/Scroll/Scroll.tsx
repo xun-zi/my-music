@@ -8,7 +8,7 @@ const Scroll = styled.div`
     position:relative;
     height:100%;
     width:100%;
-    overflow:hidden;
+    overflow:${(props: { overflow: any }) => props.overflow };
 `
 const Test = styled.div`
     height:1000px;
@@ -18,14 +18,15 @@ const Test = styled.div`
 
 type Props = {
     children: ReactNode,
-    onScroll?: (pos?: { x: number, y: number }) => any,
+    onScroll?: (pos: { x: number, y: number }) => any,
     onhandlePullDown?: Function,
-    onhandlePullUp?:Function,
+    onhandlePullUp?: Function,
     direction?: 'horizontal' | 'vertical',
+    overflow?: boolean
 }
 
 const ScrollEl = forwardRef(function (props: Props, ref) {
-    const { onScroll, onhandlePullDown, direction = 'horizontal',onhandlePullUp} = props;
+    const { onScroll, onhandlePullDown, direction = 'horizontal', onhandlePullUp, overflow = true } = props;
     const wrapperRef = useRef<HTMLDivElement | null>(null);
     const [bs, setBs] = useState<BScroll | null>(null)
     useLayoutEffect(() => {
@@ -56,9 +57,9 @@ const ScrollEl = forwardRef(function (props: Props, ref) {
     })
     useEffect(() => {
         if (!bs || !onScroll) return;
-        bs.on("scroll",onScroll)
+        bs.on("scroll", onScroll)
         return () => {
-            bs.off("scroll",onScroll)
+            bs.off("scroll", onScroll)
         }
     }, [bs, onScroll])
 
@@ -66,29 +67,29 @@ const ScrollEl = forwardRef(function (props: Props, ref) {
         if (!bs || !onhandlePullUp) return;
         const handlePullUp = () => {
             // console.log("bs.y bs.maxScorllY",bs.y,bs.maxScrollY,bs.y < bs.maxScrollY - 50)
-            if(bs.y < bs.maxScrollY - 50){
+            if (bs.y < bs.maxScrollY - 50) {
                 onhandlePullUp();
             }
         }
-        bs.on("touchEnd",handlePullUp);
+        bs.on("touchEnd", handlePullUp);
         return () => {
-            bs.off("touchEnd",handlePullUp)
+            bs.off("touchEnd", handlePullUp)
         }
-    }, [bs,onhandlePullUp])
+    }, [bs, onhandlePullUp])
 
     useEffect(() => {
-        if(!bs || !onhandlePullDown)return;
+        if (!bs || !onhandlePullDown) return;
         const handlePullUp = () => {
             // console.log("bs.y",bs.y)
-            if(bs.y > 50){
+            if (bs.y > 50) {
                 onhandlePullDown();
             }
         }
-        bs.on("touchEnd",handlePullUp)
+        bs.on("touchEnd", handlePullUp)
         return () => {
-            bs.off("touchEnd",handlePullUp)
+            bs.off("touchEnd", handlePullUp)
         }
-    },[bs,onhandlePullDown])
+    }, [bs, onhandlePullDown])
 
     useImperativeHandle(ref, () => ({
         refresh() {
@@ -104,7 +105,7 @@ const ScrollEl = forwardRef(function (props: Props, ref) {
         }
     }));
 
-    return (<Scroll ref={wrapperRef}>
+    return (<Scroll ref={wrapperRef} overflow={overflow ? "hidden" : "visible"} >
         {
             props.children
         }

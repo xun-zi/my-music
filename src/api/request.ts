@@ -19,10 +19,18 @@ export const getHotSingerListRequest = (count: number | string = 0) => {
   }>;
 };
 
-export const getSingerListRequest = (category:string, alpha:string, count:number) => {
+export const getSingerListRequest = (
+  category: string,
+  alpha: string,
+  count: number
+) => {
   return axiosInstance.get(
     `/artist/list?cat=${category}&initial=${alpha.toLowerCase()}&offset=${count}`
   );
+};
+
+export const getSingerInfoRequest = (id:number|string) => {
+  return axiosInstance.get(`/artists?id=${id}`);
 };
 
 //歌手种类

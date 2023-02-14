@@ -3,13 +3,16 @@ import ImgR from "@/components/ImgR";
 import PageTransition from "@/components/pageTransition"
 import { memo, useEffect, useRef, useState, useTransition } from "react"
 import style from "@/assets/global-style"
-import { Bg, Desc, List, ListItem, Operation } from "./style";
+import { Bg, Desc, Operation } from "./style";
 import { getCount, getName } from "@/api/utils";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchAlbumDataAction } from "@/store/module/album";
 import { useParams } from "react-router-dom";
 import { CurrentAlbum } from "@/api/type";
-import { changePlayer, changePlayList, selectPlayerSong} from "@/store/module/player";
+import { changePlayer, changePlayList, selectPlayerSong } from "@/store/module/player";
+import { CurrentSong } from "@/components/Player/type";
+import { GoodList } from "@/components/Player/PlayList/style";
+import SongList from "@/components/songList/songList";
 
 
 
@@ -50,35 +53,6 @@ function Album() {
                 <div>更多</div>
             </div>
         </Operation>)
-    }
-    const GoodList = () => {
-        const ListItemClick = (index:number) => {
-            dispatch(changePlayList(currentAlbum.tracks))
-            dispatch(selectPlayerSong(index))
-            dispatch(changePlayer(true));
-        }
-        return <List>
-            <div className="Top">
-                <span className="iconfont icon-Player"></span>
-                <span className="prefix">播放全部</span>
-                <span className="count">(共{getCount(currentAlbum.tracks.length)}首)</span>
-                <div className="collect">
-                    <span className="iconfont icon-add"></span>
-                    <span className="Num">收藏({getCount(currentAlbum.subscribedCount)})</span>
-                </div>
-            </div>
-            {
-                currentAlbum.tracks.map((item, index) => {
-                    return (<ListItem key={index} onClick={()=>{ListItemClick(index)}}>
-                        <div className="idx">{index + 1}</div>
-                        <div className="singer">
-                            <div className="name">{item.name}</div>
-                            <div className="ly">{item.al.name + ' - ' + getName(item.ar)}</div>
-                        </div>
-                    </ListItem>)
-                })
-            }
-        </List>
     }
     console.log("Album", currentAlbum)
     const scrollRef = useRef<HTMLDivElement | null>(null);
@@ -130,9 +104,7 @@ function Album() {
         {
             OperationEl()
         }
-        {
-            GoodList()
-        }
+            <SongList data={currentAlbum.tracks} subscribedCount={currentAlbum.subscribedCount}/>
     </>)
 
 

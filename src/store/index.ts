@@ -3,7 +3,7 @@ import recommendRedcer from "./module/recommend";
 import albumReducer from "./module/album";
 import playerReducer from "./module/player";
 import singersReducer from "./module/singers";
-
+import singerReducer from "./module/singer"
 
 
 
@@ -15,7 +15,8 @@ const store = configureStore({
         recommend:recommendRedcer,
         album:albumReducer,
         player:playerReducer,
-        singers:singersReducer
+        singers:singersReducer,
+        singer:singerReducer
     }
 })
 
