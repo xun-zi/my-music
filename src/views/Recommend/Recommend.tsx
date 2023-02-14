@@ -11,6 +11,7 @@ import { getCount } from "@/api/utils";
 import { Outlet, useNavigate } from "react-router-dom";
 import ImgR from "@/components/ImgR";
 import Singers from "../singers/Singers";
+import { forceCheck } from "react-lazyload"
 
 
 
@@ -65,7 +66,7 @@ function Recommend() {
     // <Slider bannerList={bannerList}></Slider>
     return (
         <>
-            <Scroll>
+            <Scroll onScroll={forceCheck}>
                 <div>
                     <Slider bannerList={bannerList}></Slider>
                     <Title>推荐歌单</Title>

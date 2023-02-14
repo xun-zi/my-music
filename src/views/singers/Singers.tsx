@@ -89,7 +89,7 @@ export default function () {
             <Horizontal title="首字母:" categoryTypes={alphaTypes} oldval={alphabet} onclickHandle={alphabetHandle} />
             <List>
                 <PullDown style={{ display: isPullDown ? "block" : "none" }}><BallScaleMultiple /></PullDown>
-                <Scroll onScroll={forceCheck} onhandlePullDown={() => setIsPullDown(true)} onhandlePullUp={() => setIsPullUp(true)}>
+                <Scroll onScroll={forceCheck} onhandlePullDown={() => setIsPullDown(true)} onhandlePullUp={() => setIsPullUp(true)} refresh={false}>
                     <div>
                         {
                             singerList.map((item) => {

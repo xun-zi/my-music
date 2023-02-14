@@ -29,8 +29,12 @@ export const getSingerListRequest = (
   );
 };
 
-export const getSingerInfoRequest = (id:number|string) => {
+export const getSingerInfoRequest = (id: number | string) => {
   return axiosInstance.get(`/artists?id=${id}`);
+};
+
+export const getRankListRequest = () => {
+  return axiosInstance.get(`/toplist/detail`);
 };
 
 //歌手种类
