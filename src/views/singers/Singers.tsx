@@ -31,18 +31,24 @@ export default function () {
 
     const categoryHandle = (val: string) => {
         if (val == category) return;
+        setOffset(0);
         setCategory(val)
     }
     const alphabetHandle = (val: string) => {
         if (val == alphabet) return;
+        setOffset(0);
         setAlphabet(val)
     }
+    const scrollRef = useRef<any>();
     useEffect(() => {
         getSingerList();
+        console.log("[category, alphabet]")
+        console.log(scrollRef.current?.refresh);
+        scrollRef.current?.refresh();
     }, [category, alphabet])
 
-    function getSingerList() {
-        getSingerListRequest(category, alphabet, offset * 30).then(({ artists }: any) => {
+    async function getSingerList() {
+        const { artists }:any = await getSingerListRequest(category, alphabet, offset * 30) ;
             // console.log(artists);
             // console.log("category, alphabet, offset",category,alphabet,offset)
             dispatch(changeSingerList(artists));
@@ -53,8 +59,7 @@ export default function () {
                     return [...data, ...artists]
                 });
             }
-
-        })
+         return;
     }
 
     useEffect(() => {
@@ -64,8 +69,8 @@ export default function () {
     const [isPullDown, setIsPullDown] = useState(false);
     useEffect(() => {
         if (!isPullDown) return;
-        getSingerList();
-        setIsPullDown(false);
+        getSingerList().then(() => setIsPullDown(false));
+        
     }, [isPullDown])
     const [isPullUp, setIsPullUp] = useState(false);
     useEffect(() => {
@@ -73,8 +78,8 @@ export default function () {
         setOffset((state) => {
             return state + 1;
         })
-        getSingerList();
-        setIsPullUp(false)
+        getSingerList().then(() => setIsPullUp(false))
+        
     }, [isPullUp])
 
 
@@ -89,10 +94,10 @@ export default function () {
             <Horizontal title="首字母:" categoryTypes={alphaTypes} oldval={alphabet} onclickHandle={alphabetHandle} />
             <List>
                 <PullDown style={{ display: isPullDown ? "block" : "none" }}><BallScaleMultiple /></PullDown>
-                <Scroll onScroll={forceCheck} onhandlePullDown={() => setIsPullDown(true)} onhandlePullUp={() => setIsPullUp(true)} refresh={false}>
+                <Scroll onScroll={forceCheck} onhandlePullDown={() => setIsPullDown(true)} onhandlePullUp={() => setIsPullUp(true)} ref={scrollRef}>
                     <div>
                         {
-                            singerList.map((item) => {
+                            singerList.map((item,index) => {
 
                                 return (
                                     <ListItem key={item.id} onClick={() => ListItemClick(item.id!)}>

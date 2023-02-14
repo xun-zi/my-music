@@ -54,7 +54,7 @@ const ScrollEl = forwardRef(function (props: Props, ref) {
         })
         setBs(bs);
     }, [])
-    useLayoutEffect(() => {
+    useEffect(() => {
         bs?.refresh();
     })
     useEffect(() => {

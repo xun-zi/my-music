@@ -35,7 +35,7 @@ export const ListItem = styled.div`
 export const PullDown = styled.div`
   position: absolute;
   width: 100%;
-  top: 0;
+  top: 50px;
   left: 0;
   right: 0;
   margin: auto;
@@ -45,7 +45,7 @@ export const PullDown = styled.div`
 `;
 export const PullUp = styled.div`
   position: absolute;
-  bottom: 0;
+  bottom: 50px;
   left: 0;
   right: 0;
   margin: auto;

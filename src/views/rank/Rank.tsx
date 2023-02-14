@@ -7,6 +7,7 @@ import { GlobalListItem, Img, OfficeListItem, OList, Title, Wrapper } from "./st
 import { GList } from "./style";
 import LazyLoad, { forceCheck } from "react-lazyload"
 import musicImg from "@/assets/music.png"
+import { Outlet, useNavigate, useParams } from "react-router-dom";
 
 type ImgType = {
     id: number,
@@ -22,8 +23,13 @@ export default function () {
         dispatch(fetchRankListAction());
     }, [])
     const [officeList, globalList] = filterIndex(rankList)
+    const navigate = useNavigate();
+    const navHandle = (id: number | string) => {
+        console.log("navHandle")
+        navigate(id + "")
+    }
     function ImgEl(data: ImgType) {
-        return (<Img>
+        return (<Img onClick={() => navHandle(data.id)}>
             <div className="decorate"></div>
 
             <LazyLoad placeholder={<img src={musicImg} />}>
@@ -75,18 +81,22 @@ export default function () {
 
     function showEL() {
         return (
-            <Wrapper>
-                <Scroll onScroll={forceCheck}>
-                    <div>
-                        <Title>官方榜</Title>
-                        <OfficeListEl />
-                        <Title>全球榜</Title>
-                        <GloblListEl />
-                    </div>
-                </Scroll>
-            </Wrapper>
+            <>
+                <Wrapper>
+                    <Scroll onScroll={forceCheck}>
+                        <div>
+                            <Title>官方榜</Title>
+                            <OfficeListEl />
+                            <Title>全球榜</Title>
+                            <GloblListEl />
+                        </div>
+                    </Scroll>
+                </Wrapper>
+                <Outlet />
+            </>
+
         )
     }
 
-    return loading ? 'loading' : showEL();
+    return loading ? <span>loading</span> : showEL();
 }
