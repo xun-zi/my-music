@@ -34,7 +34,6 @@ function Album() {
     })
 
     const OperationEl = () => {
-
         return (<Operation>
             <div>
                 <span className="iconfont icon-comments"></span>
@@ -54,7 +53,7 @@ function Album() {
             </div>
         </Operation>)
     }
-    console.log("Album", currentAlbum)
+    // console.log("Album", currentAlbum)
     const scrollRef = useRef<HTMLDivElement | null>(null);
     const HeaderRef = useRef<HTMLDivElement | null>(null);
     const [isScroll, setIsScroll] = useState(false);
@@ -92,7 +91,7 @@ function Album() {
             <ImgR width="120px" singer={{
                 picUrl: currentAlbum.coverImgUrl,
                 playCount: currentAlbum.subscribedCount,
-                accountId:1
+                accountId: 1
             }} />
             <div className="desc">
                 <div className="title">{currentAlbum.name}</div>
@@ -105,7 +104,7 @@ function Album() {
         {
             OperationEl()
         }
-            <SongList data={currentAlbum.tracks} subscribedCount={currentAlbum.subscribedCount}/>
+        <SongList data={currentAlbum.tracks} subscribedCount={currentAlbum.subscribedCount} />
     </>)
 
 

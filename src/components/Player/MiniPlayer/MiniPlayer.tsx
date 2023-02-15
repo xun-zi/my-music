@@ -12,12 +12,12 @@ import { CurrentSong } from "../type"
 
 type Props = {
     currentSong: CurrentSong,
-    currentTime:number
+    currentTime: number
 }
 
 export default function (props: Props) {
     const { playing, fullScreen } = useSelector((state: any) => state.player)
-    const { currentSong,currentTime} = props;
+    const { currentSong, currentTime } = props;
     const dispatch = useDispatch<any>();
 
     const startPause = (state: boolean, e: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
@@ -30,7 +30,7 @@ export default function (props: Props) {
 
     const miniPlayerRef = useRef<HTMLDivElement | null>(null);
 
-    const musicListClick = (e:React.SyntheticEvent<HTMLSpanElement, Event>) => {
+    const musicListClick = (e: React.SyntheticEvent<HTMLSpanElement, Event>) => {
         e.stopPropagation();
         dispatch(changeShowPlayList(true))
     }

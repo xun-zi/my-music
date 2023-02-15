@@ -19,7 +19,7 @@ import { forceCheck } from "react-lazyload"
 function Recommend() {
 
     const dispatch = useDispatch();
-    const [scrollRefresh, setScrollRefresh] = useState(false)
+    // const [scrollRefresh, setScrollRefresh] = useState(false)
     const { bannerList, singerList } = useSelector(({ recommend }: any) => {
         return {
             bannerList: recommend.bannerList,

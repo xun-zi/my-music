@@ -18,14 +18,14 @@ type ImgType = {
 export default function () {
 
     const dispatch = useDispatch<any>();
-    const { rankList, loading } = useSelector(({ rank }: any) => rank)
+    const { rankList, loading } = useSelector(({ rank }: any) => rank);
     useEffect(() => {
         dispatch(fetchRankListAction());
     }, [])
     const [officeList, globalList] = filterIndex(rankList)
     const navigate = useNavigate();
     const navHandle = (id: number | string) => {
-        console.log("navHandle")
+        // console.log("navHandle")
         navigate(id + "")
     }
     function ImgEl(data: ImgType) {
@@ -38,7 +38,6 @@ export default function () {
             <span>{data.updateFrequency}</span>
         </Img>)
     }
-
     function OfficeListEl() {
         return (<OList>
             {
@@ -63,7 +62,6 @@ export default function () {
             }
         </OList>)
     }
-
     function GloblListEl() {
         return (<GList>
             {
