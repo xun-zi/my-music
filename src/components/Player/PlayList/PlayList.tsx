@@ -41,6 +41,7 @@ export default function () {
     }, [])
     const TouchData = useRef({
         startPosY: 0,
+        curPosY:0,
         drawing: false,
         WrapperCurPosY: 0,
         isScrollTop: true,
@@ -48,9 +49,8 @@ export default function () {
     function listDrawEv(e: React.UIEvent<HTMLDivElement, UIEvent>) {
         // console.log(e.currentTarget.scrollTop)
         let current = TouchData.current!;
-        if (current.drawing) {
+        if (current.drawing && current.curPosY - current.startPosY < 0) {
             e.preventDefault();
-            return;
         }
         if (e.currentTarget.scrollTop == 0) current.isScrollTop = true;
         else current.isScrollTop = false;
@@ -73,8 +73,8 @@ export default function () {
                 current.startPosY = e.touches[0].pageY;
                 return;
             }
-
-            let offset = e.touches[0].pageY - current.startPosY;
+            current.curPosY = e.touches[0].pageY;
+            let offset = current.curPosY - current.startPosY;
 
             // console.log("e.touches[0].pageY current.startPosY", e.touches[0].pageY,current.startPosY)
             // console.log(offset)

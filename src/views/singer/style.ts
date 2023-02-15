@@ -21,23 +21,26 @@ export const Wrapper = styled.div`
       width: 100%;
       top: calc(75vw + 4px);
       bottom: 0;
-      height:10000px;
-      border-radius:10px 10px 0 0;
+      height: 10000px;
+      border-radius: 10px 10px 0 0;
     }
   }
 `;
 
 export const HeaderWrapper = styled.div<{
-  url: string;
+  url?: string;
 }>`
   overflow: hidden;
   position: fixed;
   z-index: 10000;
   top: 0;
   width: 100%;
-  background-image: url(${(props) => props.url});
+
   background-size: cover;
-  &::before {
+  &.exist-bg {
+    background-image: url(${(props) => props.url});
+  }
+  &.exist-bg::before {
     content: "";
     position: absolute;
     top: 0;
@@ -46,7 +49,7 @@ export const HeaderWrapper = styled.div<{
     width: 100vw;
     height: 100%;
     background: rgba(7, 17, 27, 0.3);
-    z-index:-10;
+    z-index: -10;
   }
 `;
 
@@ -103,6 +106,6 @@ export const ScrollWrapper = styled.div`
   position: fixed;
   width: 100%;
   top: calc(75vw + 4px);
-  z-index:1000;
+  z-index: 1000;
   bottom: 0;
 `;

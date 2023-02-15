@@ -43,10 +43,12 @@ export default function () {
     const BgImgRef = useRef<HTMLDivElement | null>(null)
     const btnRef = useRef<HTMLDivElement | null>(null);
     const whiteBoardRef = useRef<HTMLDivElement | null>(null);
+    const headerWrapperRef = useRef<HTMLDivElement|null>(null);
     const ScrollHandle = (pos: { x: number, y: number }) => {
         const bgImg = BgImgRef.current!;
         const btn = btnRef.current!;
         const whiteBoard = whiteBoardRef.current!;
+        const headerWraper = headerWrapperRef.current!
         const y = pos.y;
         const bgImgHeight = bgImg.clientHeight;
         const instance = bgImgHeight - 42;
@@ -55,16 +57,18 @@ export default function () {
             bgImg.style.transform = `scale(${percentage})`;
             btn.style.transform = `translate3d(0,${y}px,0)`;
             whiteBoard.style.transform = `translate3d(0,${y + 10}px,0)`;
+            headerWraper.classList.remove('exist-bg');
         } else {
             btn.style.opacity = 1 + y / instance + '';
             btn.style.transform = `translate3d(0,${y}px,0)`;
             whiteBoard.style.transform = `translate3d(0,${y + 10}px,0)`;
+            headerWraper.classList.add('exist-bg')
         }
     }
     const showEl = () => {
         return (<PageTransition showStatus={showStatus}>
             <Wrapper >
-                <HeaderWrapper url={singer.artist.picUrl}><Header title={singer.artist.name} onBack={() => setShowStatus(false)} /></HeaderWrapper>
+                <HeaderWrapper ref={headerWrapperRef} url={singer.artist.picUrl}><Header title={singer.artist.name} onBack={() => setShowStatus(false)} /></HeaderWrapper>
                 <BgImg ref={BgImgRef} url={singer.artist.picUrl}></BgImg>
                 <Pla />
                 <SingerButton ref={btnRef}>
