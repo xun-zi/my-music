@@ -45,6 +45,56 @@ export default function () {
         WrapperCurPosY: 0,
         isScrollTop: true,
     })
+    function listDrawEv(e: React.UIEvent<HTMLDivElement, UIEvent>) {
+        // console.log(e.currentTarget.scrollTop)
+        let current = TouchData.current!;
+        if (current.drawing) {
+            e.preventDefault();
+            return;
+        }
+        if (e.currentTarget.scrollTop == 0) current.isScrollTop = true;
+        else current.isScrollTop = false;
+    }
+    const GoodListDrawEv: Record<string, (e: React.TouchEvent<HTMLDivElement>) => any> = {
+        onTouchStart(e) {
+            console.log("onTouchStart")
+            let current = TouchData.current;
+            current.drawing = true;
+            // console.log(e.touches[0].pageY);
+            current.startPosY = e.touches[0].pageY;
+            const Wrapper = WrapperRef.current!;
+            Wrapper.style.transition = ""
+        },
+        onTouchMove(e) {
+            console.log("onTouchMove")
+            let current = TouchData.current;
+            const Wrapper = WrapperRef.current!;
+            if (!current.isScrollTop) {
+                current.startPosY = e.touches[0].pageY;
+                return;
+            }
+
+            let offset = e.touches[0].pageY - current.startPosY;
+
+            // console.log("e.touches[0].pageY current.startPosY", e.touches[0].pageY,current.startPosY)
+            // console.log(offset)
+            Wrapper.style.transform = `translate3d(0, ${Math.max(0, offset)}px, 0)`;
+            current.WrapperCurPosY = offset;
+        },
+        onTouchEnd(e) {
+            let current = TouchData.current;
+            const Wrapper = WrapperRef.current!;
+            if (current.WrapperCurPosY > 220) {
+                disptch(changeShowPlayList(false))
+                console.log("disptch(changeShowPlayList(false))")
+            } else {
+                Wrapper.style.transform = `translate3d(0,0, 0)`
+            }
+            current.drawing = false;
+            Wrapper.style.transition = "0.4s"
+        }
+    }
+
 
     return (<CSSTransition
         in={showPlayList}
@@ -63,65 +113,20 @@ export default function () {
     >
         <Wrapper onClick={WrapperClick} ref={WrapperRef}>
             <GoodList onClick={(e) => e.stopPropagation()} className="songList"
-                onTouchStart={
-                    (e) => {
-                        let current = TouchData.current;
-                        current.drawing = true;
-                        // console.log(e.touches[0].pageY);
-                        current.startPosY = e.touches[0].pageY;
-                        const Wrapper = WrapperRef.current!;
-                        Wrapper.style.transition = ""
-                    }
-                }
-                onTouchMove={
-                    (e) => {
-                        let current = TouchData.current;
-                        const Wrapper = WrapperRef.current!;
-                        if(!current.isScrollTop){
-                            current.startPosY = e.touches[0].pageY;
-                            return;
-                        }
-                        
-                        let offset = e.touches[0].pageY - current.startPosY;
-
-                        // console.log("e.touches[0].pageY current.startPosY", e.touches[0].pageY,current.startPosY)
-                        // console.log(offset)
-                        Wrapper.style.transform = `translate3d(0, ${Math.max(0, offset)}px, 0)`;
-                        current.WrapperCurPosY = offset;
-                    }
-                }
-                onTouchEnd={
-                    (e) => {
-                        let current = TouchData.current;
-                        const Wrapper = WrapperRef.current!;
-                        if (current.WrapperCurPosY > 220) {
-                            disptch(changeShowPlayList(false))
-                            console.log("disptch(changeShowPlayList(false))")
-                        } else {
-                            Wrapper.style.transform = `translate3d(0,0, 0)`
-                        }
-                        current.drawing = false;
-                        Wrapper.style.transition = "0.4s"
-                    }
-                }
+                onTouchStart={GoodListDrawEv.onTouchStart}
+                onTouchMove={GoodListDrawEv.onTouchMove}
+                onTouchEnd={GoodListDrawEv.onTouchEnd}
             >
+                {/* 播放方式 */}
                 <div className="playState">
                     <span className={`iconfont ${playerStateName[playerState].svg}`}></span>
                     {
                         playerStateName[playerState].name + "播放"
                     }
                 </div>
+                {/* 歌单 */}
                 <div className="list"
-                    onScroll={(e) => {
-                        // console.log(e.currentTarget.scrollTop)
-                        let current = TouchData.current!;
-                        if(current.drawing){
-                            e.preventDefault();
-                        }
-                        if (e.currentTarget.scrollTop == 0) current.isScrollTop = true;
-                        else current.isScrollTop = false;
-
-                    }}
+                    onScroll={listDrawEv}
                 >
                     {
                         playList.map((item: CurrentSong, index: number) => {

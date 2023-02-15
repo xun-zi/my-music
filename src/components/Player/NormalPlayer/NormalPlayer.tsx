@@ -13,19 +13,19 @@ import { CurrentSong } from "../type"
 
 type Props = {
     currentSong: CurrentSong,
-    currentTime:number,
-    setCurrentTime:(currentTime:number) => void
+    currentTime: number,
+    setCurrentTime: (currentTime: number) => void
 }
 
 export default function (props: Props) {
-    const { currentSong,setCurrentTime} = props;
+    const { currentSong, setCurrentTime } = props;
     const dispatch = useDispatch<any>();
     const backHandle = () => {
         dispatch(changeScreen(false));
     }
-    const {currentTime} = props;
-    const { playing, fullScreen, playerState, playList,songIndex} = useSelector(({ player }: any) => player)
-    
+    const { currentTime } = props;
+    const { playing, fullScreen, playerState, playList, songIndex } = useSelector(({ player }: any) => player)
+
 
     const startPause = (state: boolean, e: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
         e.stopPropagation();
@@ -74,16 +74,16 @@ export default function (props: Props) {
             dispatch(nextSong());
         } else if (playerState == 1) {
             let randomNum = 0;
-            do{
-               randomNum = Math.random() * playList.length | 0
-            } while(songIndex == randomNum);
+            do {
+                randomNum = Math.random() * playList.length | 0
+            } while (songIndex == randomNum);
             dispatch(randomPlayer(randomNum));
         } else {
             audioRef.current!.currentTime = 0;
         }
     }
 
-    const musicListOnclick = (e:React.SyntheticEvent<HTMLSpanElement, Event>) => {
+    const musicListOnclick = (e: React.SyntheticEvent<HTMLSpanElement, Event>) => {
         e.stopPropagation();
         dispatch(changeShowPlayList(true));
     }
