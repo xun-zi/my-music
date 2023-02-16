@@ -80,6 +80,7 @@ export default function (props: Props) {
             dispatch(randomPlayer(randomNum));
         } else {
             audioRef.current!.currentTime = 0;
+            audioRef.current!.play();
         }
     }
 

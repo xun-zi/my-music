@@ -48,18 +48,18 @@ export default function () {
     }, [category, alphabet])
 
     async function getSingerList() {
-        const { artists }:any = await getSingerListRequest(category, alphabet, offset * 30) ;
-            // console.log(artists);
-            // console.log("category, alphabet, offset",category,alphabet,offset)
-            dispatch(changeSingerList(artists));
-            if (offset == 0) {
-                setSingerList(artists);
-            } else {
-                setSingerList((data) => {
-                    return [...data, ...artists]
-                });
-            }
-         return;
+        const { artists }: any = await getSingerListRequest(category, alphabet, offset * 30);
+        // console.log(artists);
+        // console.log("category, alphabet, offset",category,alphabet,offset)
+        dispatch(changeSingerList(artists));
+        if (offset == 0) {
+            setSingerList(artists);
+        } else {
+            setSingerList((data) => {
+                return [...data, ...artists]
+            });
+        }
+        return;
     }
 
     useEffect(() => {
@@ -70,7 +70,7 @@ export default function () {
     useEffect(() => {
         if (!isPullDown) return;
         getSingerList().then(() => setIsPullDown(false));
-        
+
     }, [isPullDown])
     const [isPullUp, setIsPullUp] = useState(false);
     useEffect(() => {
@@ -79,7 +79,7 @@ export default function () {
             return state + 1;
         })
         getSingerList().then(() => setIsPullUp(false))
-        
+
     }, [isPullUp])
 
 
@@ -97,7 +97,7 @@ export default function () {
                 <Scroll onScroll={forceCheck} onhandlePullDown={() => setIsPullDown(true)} onhandlePullUp={() => setIsPullUp(true)} ref={scrollRef}>
                     <div>
                         {
-                            singerList.map((item,index) => {
+                            singerList.map((item, index) => {
 
                                 return (
                                     <ListItem key={item.id} onClick={() => ListItemClick(item.id!)}>
