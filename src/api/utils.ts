@@ -32,7 +32,7 @@ export const filterIndex = (rankList: any[]) => {
       return [rankList.slice(0, i + 1), rankList.slice(i + 1)];
     }
   }
-  return []
+  return [];
 };
 
 export const formatPlayTime = (interval: number) => {
@@ -41,3 +41,19 @@ export const formatPlayTime = (interval: number) => {
   let second = (interval % 60).toString().padStart(2, "0");
   return `${mintue}:${second}`;
 };
+
+export function lyricParser(lyrics: string) {
+  const arr = lyrics.split("\n");
+  const res: {
+    time: number;
+    lyric: string;
+  }[] = [];
+  for (const ly of arr) {
+    const [time, lyric] = ly.split("]");
+    res.push({
+      time: +time.slice(4),
+      lyric,
+    });
+  }
+  return res;
+}

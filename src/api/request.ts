@@ -24,7 +24,7 @@ export const getSingerListRequest = (
   alpha: string,
   count: number
 ) => {
-  const [area,type] = category.split(' ');
+  const [area, type] = category.split(" ");
   return axiosInstance.get(
     `/artist/list?area=${area}&type=${type}&initial=${alpha.toLowerCase()}&offset=${count}`
   );
@@ -36,6 +36,10 @@ export const getSingerInfoRequest = (id: number | string) => {
 
 export const getRankListRequest = () => {
   return axiosInstance.get(`/toplist/detail`);
+};
+
+export const getLyricsRequest = (id: number) => {
+  return axiosInstance.get(`/lyric?id=${id}`);
 };
 
 //歌手种类

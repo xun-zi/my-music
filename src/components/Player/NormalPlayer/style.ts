@@ -79,10 +79,46 @@ export const Cd = styled.div<{
       border-radius: 50%;
     }
   }
+  .needle {
+    &.pause {
+      transform: scaleX(-1) rotate(48deg);
+    }
+    position: absolute;
+    width: 23vw;
+    -webkit-transform-origin: left top;
+    -ms-transform-origin: left top;
+    transform-origin: left top;
+    transform: scaleX(-1) rotate(23deg);
+    left: 58vw;
+    top: -27vw;
+    transition: rotate 0.3s;
+  }
+`;
+
+export const Lyrics = styled.div`
+  box-sizing: border-box;
+  position: absolute;
+  top: 8%;
+  bottom: 17%;
+  width: 100vw;
+  padding: 10% 10%;
+  color: #ddd;
+  overflow: scroll;
+  &::-webkit-scrollbar {
+    width: 0 !important;
+  }
+  /* background-color: black; */
+  .lyric {
+    &.active {
+      color: white;
+    }
+    text-align: center;
+    padding: 10px 0;
+  }
 `;
 
 export const Top = styled.div`
-  display:inline-block;
+  display: inline-block;
   .top {
     display: flex;
     align-items: center;
@@ -143,7 +179,7 @@ export const Wrapper = styled.div<{
 
   &.normal-enter .top {
     transform: translate3d(0, -100%, 0);
-    transition-delay:0.2s;
+    transition-delay: 0.2s;
     transition: 0.4s;
   }
 
@@ -153,7 +189,7 @@ export const Wrapper = styled.div<{
 
   &.normal-enter .bottom {
     transform: translate3d(0, 100%, 0);
-    transition-delay:0.2s;
+    transition-delay: 0.2s;
     transition: 0.4s;
   }
 
@@ -173,6 +209,16 @@ export const Wrapper = styled.div<{
       width: 100vw;
       height: 100vh;
       filter: blur(15px);
+    }
+    .before {
+      content: "";
+      position: absolute;
+      z-index: 1;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: rgba(0, 0, 0, 0.2);
     }
   }
 `;

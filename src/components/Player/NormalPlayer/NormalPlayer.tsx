@@ -1,13 +1,15 @@
 import styled from "styled-components"
-import { Bottom, Cd, Top, Wrapper } from "./style"
+import { Bottom, Cd, Lyrics, Top, Wrapper } from "./style"
 import { getName, getSongUrl, isEmptyObject } from "@/api/utils"
 import disc from "./disc.png"
+import needle from "./needle.png"
 import ProgressBar from "@/components/ProgressBar/ProgressBar"
 import { useDispatch, useSelector } from "react-redux"
-import { changePlayer, changePlayerState, changeScreen, changeShowPlayList, changeSongIndex, nextSong, preSong, randomPlayer } from "@/store/module/player"
+import { changelyrics, changePlayer, changePlayerState, changeScreen, changeShowPlayList, changeSongIndex, nextSong, preSong, randomPlayer } from "@/store/module/player"
 import { CSSTransition } from "react-transition-group"
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useLayoutEffect, useRef, useState } from "react"
 import { CurrentSong } from "../type"
+import { getLyricsRequest } from "@/api/request"
 
 
 
@@ -20,11 +22,18 @@ type Props = {
 export default function (props: Props) {
     const { currentSong, setCurrentTime } = props;
     const dispatch = useDispatch<any>();
+    useEffect(() => {
+        if (!currentSong.id) return
+        getLyricsRequest(currentSong.id).then((res: any) => {
+            // console.log('lyrics', res);
+            dispatch(changelyrics(res.lrc.lyric));
+        })
+    }, [currentSong])
     const backHandle = () => {
         dispatch(changeScreen(false));
     }
     const { currentTime } = props;
-    const { playing, fullScreen, playerState, playList, songIndex } = useSelector(({ player }: any) => player)
+    const { playing, fullScreen, playerState, playList, songIndex, lyrics } = useSelector(({ player }: any) => player)
 
 
     const startPause = (state: boolean, e: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
@@ -88,7 +97,65 @@ export default function (props: Props) {
         e.stopPropagation();
         dispatch(changeShowPlayList(true));
     }
+    const lyricWrapperRef = useRef<HTMLDivElement | null>(null);
+    const lyricHeightsRef = useRef<number[]>([]);
+    useEffect(() => {
+        setTimeout(() => {
+            const divs = lyricWrapperRef.current?.querySelectorAll('div');
+            if (!divs) return;
+            // console.log('等待')
+            if (divs[0].clientHeight === 0) return;
 
+            // console.log(divs[0].clientHeight);
+            let arr: any = [];
+            Array.from(divs).forEach((div) => {
+                arr.push(div.clientHeight);
+            })
+            let pre = 0;
+            for (let i = 0; i < arr.length; i++) {
+                pre += arr[i];
+                arr[i] = pre;
+            }
+            lyricHeightsRef.current = arr;
+        }, 3000)
+    }, [lyrics]);
+    const lyricWrapper = lyricWrapperRef.current!;
+    const lyricHeights = lyricHeightsRef.current;
+    const [lyricPos, setLyricPos] = useState(0);
+
+    useEffect(() => {
+        let pos = 0;
+        for (let i = 0; i < lyrics.length; i++) {
+            if (currentTime < lyrics[i].time) {
+                pos = Math.max(0, i - 1);
+                break;
+            }
+            pos = i;
+        }
+        // console.log("currentTime pos posTime", currentTime, pos, lyrics[pos]?.time)
+        // console.log('pos', pos)
+        setLyricPos(pos);
+    }, [currentTime])
+    const autoScroll = useRef<null | number>(null);
+    if (!autoScroll.current && lyricHeights[lyricPos]) lyricWrapper.scrollTop = lyricHeights[lyricPos] - 100;
+    const lyScorllEv = (e: React.UIEvent<HTMLDivElement, UIEvent>) => {
+        if (autoScroll.current) clearTimeout(autoScroll.current);
+        autoScroll.current = setTimeout(() => {
+            autoScroll.current = null
+        }, 3000);
+    }
+    const LyricsEl = () => {
+
+        return (<Lyrics style={{ visibility: !isCd ? 'visible' : 'hidden' }} onClick={() => setIsCd(true)} ref={lyricWrapperRef} onScroll={lyScorllEv}>
+            {
+                lyrics.map((item: { time: number, lyric: string }, index: number) => {
+                    return (<div className={`lyric ${lyricPos == index ? 'active' : ''}`} key={index}>{item.lyric} </div>)
+                })
+            }
+        </Lyrics>)
+    }
+
+    const [isCd, setIsCd] = useState(true);
     function showEl() {
         return (<CSSTransition
             in={fullScreen}
@@ -105,6 +172,7 @@ export default function (props: Props) {
             <Wrapper ref={normalRef}>
                 <div className="background">
                     <img src={currentSong.al.picUrl + "?param=400x400"}></img>
+                    <div className="before"></div>
                 </div>
 
                 <Top>
@@ -117,13 +185,19 @@ export default function (props: Props) {
                     </div>
                 </Top>
 
-                <Cd url={disc}>
+                <Cd url={disc} style={{ visibility: isCd ? 'visible' : 'hidden' }} onClick={() => setIsCd(false)}>
                     <div className="cd-wrap">
                         <div className={playing ? "bg cd" : "cd bg pause"} >
                             <img src={currentSong.al.picUrl + "?param=400x400"} />
                         </div>
+                        <img className={`needle ${playing ? '' : 'pause'}`} src={needle}></img>
                     </div>
                 </Cd>
+
+                {
+                    LyricsEl()
+                }
+
 
                 <Bottom>
                     <div className="bottom">
