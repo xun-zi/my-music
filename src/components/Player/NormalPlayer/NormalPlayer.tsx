@@ -134,6 +134,7 @@ export default function (props: Props) {
         }
         // console.log("currentTime pos posTime", currentTime, pos, lyrics[pos]?.time)
         // console.log('pos', pos)
+        // if (pos != lyricPos) console.log('pos currentTime lyrics ', pos, currentTime, lyrics)
         setLyricPos(pos);
     }, [currentTime])
     const autoScroll = useRef<null | number>(null);

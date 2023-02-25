@@ -48,10 +48,11 @@ export function lyricParser(lyrics: string) {
     time: number;
     lyric: string;
   }[] = [];
+  //[02:39.32]
   for (const ly of arr) {
     const [time, lyric] = ly.split("]");
     res.push({
-      time: +time.slice(4),
+      time: +time.slice(4) + 60 * +time.slice(1, 3),
       lyric,
     });
   }
