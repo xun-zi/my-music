@@ -41,7 +41,7 @@ export default function () {
     }, [])
     const TouchData = useRef({
         startPosY: 0,
-        curPosY:0,
+        curPosY: 0,
         drawing: false,
         WrapperCurPosY: 0,
         isScrollTop: true,

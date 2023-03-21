@@ -91,7 +91,7 @@ export const Cd = styled.div<{
     transform: scaleX(-1) rotate(23deg);
     left: 58vw;
     top: -27vw;
-    transition: rotate 0.3s;
+    transition: transform 0.3s;
   }
 `;
 

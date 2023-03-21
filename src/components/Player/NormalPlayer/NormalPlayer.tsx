@@ -22,6 +22,7 @@ type Props = {
 export default function (props: Props) {
     const { currentSong, setCurrentTime } = props;
     const dispatch = useDispatch<any>();
+    //获取当前歌的信息
     useEffect(() => {
         if (!currentSong.id) return
         getLyricsRequest(currentSong.id).then((res: any) => {
@@ -36,7 +37,7 @@ export default function (props: Props) {
     const { playing, fullScreen, playerState, playList, songIndex, lyrics } = useSelector(({ player }: any) => player)
 
 
-    const startPause = (state: boolean, e: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
+    const startOrPause = (state: boolean, e: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
         e.stopPropagation();
         dispatch(changePlayer(state));
     };
@@ -99,6 +100,7 @@ export default function (props: Props) {
     }
     const lyricWrapperRef = useRef<HTMLDivElement | null>(null);
     const lyricHeightsRef = useRef<number[]>([]);
+    //歌词更新获取每个歌词的高度
     useEffect(() => {
         setTimeout(() => {
             const divs = lyricWrapperRef.current?.querySelectorAll('div');
@@ -119,6 +121,9 @@ export default function (props: Props) {
             lyricHeightsRef.current = arr;
         }, 3000)
     }, [lyrics]);
+
+
+    //滚动歌词实现
     const lyricWrapper = lyricWrapperRef.current!;
     const lyricHeights = lyricHeightsRef.current;
     const [lyricPos, setLyricPos] = useState(0);
@@ -139,6 +144,7 @@ export default function (props: Props) {
     }, [currentTime])
     const autoScroll = useRef<null | number>(null);
     if (!autoScroll.current && lyricHeights[lyricPos]) lyricWrapper.scrollTop = lyricHeights[lyricPos] - 100;
+
     const lyScorllEv = (e: React.UIEvent<HTMLDivElement, UIEvent>) => {
         if (autoScroll.current) clearTimeout(autoScroll.current);
         autoScroll.current = setTimeout(() => {
@@ -155,6 +161,7 @@ export default function (props: Props) {
             }
         </Lyrics>)
     }
+
 
     const [isCd, setIsCd] = useState(true);
     function showEl() {
@@ -214,9 +221,9 @@ export default function (props: Props) {
                                 {
                                     playing
                                         ?
-                                        <span className="iconfont icon-pause1" onClick={(e) => startPause(false, e)}></span>
+                                        <span className="iconfont icon-pause1" onClick={(e) => startOrPause(false, e)}></span>
                                         :
-                                        <span className="iconfont icon-Player" onClick={(e) => startPause(true, e)}></span>
+                                        <span className="iconfont icon-Player" onClick={(e) => startOrPause(true, e)}></span>
                                 }
                             </div>
                             <div className="right" >
