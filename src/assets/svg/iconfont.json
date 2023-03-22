@@ -6,6 +6,20 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "1596779",
+      "name": "back_android",
+      "font_class": "back_android",
+      "unicode": "e7ed",
+      "unicode_decimal": 59373
+    },
+    {
+      "icon_id": "16615976",
+      "name": "delete",
+      "font_class": "delete",
+      "unicode": "e687",
+      "unicode_decimal": 59015
+    },
+    {
       "icon_id": "8106254",
       "name": "singlecycle",
       "font_class": "singlecycle",

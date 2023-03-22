@@ -1,17 +1,17 @@
 import { Top, Tab, TabItem, Content } from "./style";
-import { NavLink, Outlet } from "react-router-dom"
+import { NavLink, Outlet, useNavigate } from "react-router-dom"
 import { Suspense } from "react";
 
 
 
 export default function () {
 
-
+    const navigate = useNavigate();
     return (<div>
         <Top>
             <span className="iconfont icon-menu"></span>
             <span>云音悦</span>
-            <span className="iconfont icon-search"></span>
+            <span className="iconfont icon-search" onClick={() => navigate('/search')}></span>
         </Top>
         <Tab>
             <NavLink to="/recommend"><span>推荐</span></NavLink>

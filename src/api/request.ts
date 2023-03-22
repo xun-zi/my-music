@@ -42,6 +42,22 @@ export const getLyricsRequest = (id: number) => {
   return axiosInstance.get(`/lyric?id=${id}`);
 };
 
+export const getSongDetailRequest = (id: number) => {
+  return axiosInstance.get(`/song/detail?ids=${id}`);
+};
+
+export const getHotKeyWordsRequest = () => {
+  return axiosInstance.get(`/search/hot`);
+};
+
+export const getSuggestListRequest = (query: string) => {
+  return axiosInstance.get(`/search/suggest?keywords=${query}`);
+};
+
+export const getResultSongsListRequest = (query: string) => {
+  return axiosInstance.get(`/search?keywords=${query}`);
+};
+
 //歌手种类
 export const categoryTypes = [
   {
